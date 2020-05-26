@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { 
+import {
     Button,
     form,
     FormItem,
@@ -31,7 +31,8 @@ import {
     Cascader,
     Alert,
     Tabs,
-    TabPane
+    TabPane,
+    DatePicker
 } from 'element-ui'
 Vue.use(Button)
 Vue.use(form)
@@ -64,5 +65,6 @@ Vue.use(Cascader)
 Vue.use(Alert)
 Vue.use(Tabs)
 Vue.use(TabPane)
+Vue.use(DatePicker)
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
