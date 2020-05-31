@@ -34,7 +34,6 @@
               :fields="json_fields"
               name="filename.xls"
             >
-              <!-- 上面可以自定义自己的样式，还可以引用其他组件button -->
               <el-button type="primary">导出EXCEL</el-button>
             </download-excel>
           </el-col>
@@ -210,6 +209,22 @@ var echarts = require("echarts");
 import JsonExcel from 'vue-json-excel'
 export default {
   data() {
+    var checkGread =(rule,value,callback)=>{
+        const grade = /^-?\d{1,3}(?:\.\d{1,1})?$/;
+      //  console.log(value<0&&value>100);
+      if(value<0||value>100){
+        return callback(new Error('请输入0-100的分数'));
+      }
+       if(value){
+        if(!grade.test(value)){
+          callback(new Error('成绩只能为数字且小数点后一位'));
+        }else{
+          callback();
+        }
+        }else{
+       callback();
+    }
+    }
     return {
       tableData: [],
       chartData: [],
@@ -244,12 +259,20 @@ export default {
       addRules: {
         name: [{ required: true, message: "请输入学生姓名", trigger: "blur" }],
         sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-        birth: [{ required: true, message: "请输入用户名", trigger: "change" }]
+        birth: [{ required: true, message: "请选择出生年月", trigger: "change" }],
+        math:[{validator:checkGread,trigger: "blur" }],
+        java:[{validator:checkGread,trigger: "blur" }],
+        english:[{validator:checkGread,trigger: "blur" }],
+        sports:[{validator:checkGread,trigger: "blur" }]
       },
       alterRules: {
         name: [{ required: true, message: "请输入学生姓名", trigger: "blur" }],
         sex: [{ required: true, message: "请选择性别", trigger: "change" }],
-        birth: [{ required: true, message: "请输入用户名", trigger: "change" }]
+        birth: [{ required: true, message: "请选择出生年月", trigger: "change" }],
+        math:[{validator:checkGread,trigger: "blur" }],
+        java:[{validator:checkGread,trigger: "blur" }],
+        english:[{validator:checkGread,trigger: "blur" }],
+        sports:[{validator:checkGread,trigger: "blur" }]
       },
       json_fields:{
           "姓名":"name",
@@ -283,11 +306,11 @@ export default {
       const { data: res } = await this.$http.get("student");
       this.tableData = res;
       this.json_data = res;
-      console.log("ok");
-      console.log( this.json_data);
+      // console.log( this.json_data);
     },
     // 添加学生
     addStudentDialog() {
+      
       this.Round = this.getRound();
       this.getResult(this.Round);
       if (this.getResult) {
@@ -327,6 +350,7 @@ export default {
         if (res !== "添加成功") {
           return this.$message.error("添加学生失败！");
         }
+         console.log("ok");
         this.$message.success("添加学生成功！");
         this.addDialogVisible = false;
         this.getStudentList();
